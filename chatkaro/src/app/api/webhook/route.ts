@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     const { data: user, error: userError } = await supabase
       .from("users")
-      .select("id, business_name, language")
+      .select("id, business_name, business_description, language")
       .eq("whatsapp_number", toNumber)
       .single();
 
@@ -44,12 +44,17 @@ export async function POST(request: NextRequest) {
 
     const businessName = user.business_name || "our business";
     const language = user.language || "Hindi";
+    const businessDesc = user.business_description || "";
 
-    const systemPrompt = [
+    const systemPromptLines = [
       `You are a helpful assistant for ${businessName}.`,
       `Reply in ${language} language selected by the user.`,
       `Be friendly, short and helpful.`,
-    ].join("\n");
+    ];
+    if (businessDesc) {
+      systemPromptLines.push(`Business context: ${businessDesc}`);
+    }
+    const systemPrompt = systemPromptLines.join("\n");
 
     const aiResponse = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
