@@ -37,10 +37,14 @@ export default function SignupPage() {
     }
 
     if (data.user) {
+      const trialEndsAt = new Date();
+      trialEndsAt.setDate(trialEndsAt.getDate() + 30);
+
       const { error: profileError } = await supabase.from("users").upsert({
         id: data.user.id,
         email,
         business_name: businessName,
+        trial_ends_at: trialEndsAt.toISOString(),
       });
 
       if (profileError) {

@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     const { data: user, error: userError } = await supabase
       .from("users")
-      .select("id, business_name, business_description, language, plan")
+      .select("id, business_name, business_description, language, plan, trial_ends_at, email")
       .eq("whatsapp_number", toNumber)
       .single();
 
@@ -43,6 +43,12 @@ export async function POST(request: NextRequest) {
     }
 
     if (user.plan !== "premium") {
+      if (user.trial_ends_at && new Date(user.trial_ends_at) < new Date()) {
+        return twimlResponse(
+          "Your free trial has ended. Upgrade to keep AI running. — आपका फ्री ट्रायल खत्म हो गया है। AI जारी रखने के लिए अपग्रेड करें।"
+        );
+      }
+
       const now = new Date();
       const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
