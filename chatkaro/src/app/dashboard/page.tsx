@@ -129,6 +129,67 @@ export default async function OverviewPage() {
         ))}
       </div>
 
+      {/* Limit Warning Banner (80+ messages on free plan) */}
+      {plan !== "premium" && used >= 80 && (
+        <div
+          className={`mb-6 p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center gap-4 ${
+            used >= 100
+              ? "bg-red-500/10 border-red-500/20"
+              : "bg-amber-500/10 border-amber-500/20"
+          }`}
+        >
+          <div className="flex items-center gap-3 flex-1">
+            <div
+              className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                used >= 100 ? "bg-red-500/20" : "bg-amber-500/20"
+              }`}
+            >
+              <svg
+                className={`w-5 h-5 ${
+                  used >= 100 ? "text-red-400" : "text-amber-400"
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3
+                className={`font-semibold text-sm ${
+                  used >= 100 ? "text-red-400" : "text-amber-400"
+                }`}
+              >
+                {used >= 100
+                  ? "मैसेज लिमिट खत्म! — Message limit reached!"
+                  : `${100 - used} मैसेज बाकी — Only ${100 - used} messages remaining!`}
+              </h3>
+              <p
+                className={`text-xs mt-0.5 ${
+                  used >= 100 ? "text-red-400/70" : "text-amber-400/70"
+                }`}
+              >
+                {used >= 100
+                  ? "अपने कस्टमर्स को जवाब जारी रखने के लिए Premium में अपग्रेड करें।"
+                  : "Premium में अपग्रेड करें और unlimited AI replies पाएं।"}
+              </p>
+            </div>
+          </div>
+          <a
+            href="/dashboard/upgrade"
+            className="px-5 py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold text-sm hover:from-green-400 hover:to-emerald-500 transition-all shadow-lg shadow-green-500/25 text-center flex-shrink-0"
+          >
+            Upgrade — ₹999/mo
+          </a>
+        </div>
+      )}
+
       {/* Usage Bar (free plan only) */}
       {plan !== "premium" && (
         <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 mb-8">

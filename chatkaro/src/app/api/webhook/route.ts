@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     const { data: user, error: userError } = await supabase
       .from("users")
-      .select("id, business_name, business_description, language")
+      .select("id, business_name, business_description, language, plan")
       .eq("whatsapp_number", toNumber)
       .single();
 
@@ -40,6 +40,23 @@ export async function POST(request: NextRequest) {
       return twimlResponse(
         "Sorry, this number is not registered with ChatKaro."
       );
+    }
+
+    if (user.plan !== "premium") {
+      const now = new Date();
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
+      const { count } = await supabase
+        .from("messages")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .gte("created_at", monthStart);
+
+      if ((count ?? 0) >= 100) {
+        return twimlResponse(
+          "Sorry, this business has reached its free plan message limit. Please ask them to upgrade to ChatKaro Premium for unlimited replies."
+        );
+      }
     }
 
     const businessName = user.business_name || "our business";
