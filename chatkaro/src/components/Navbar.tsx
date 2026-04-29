@@ -35,6 +35,12 @@ export default function Navbar() {
               Pricing
             </a>
             <a
+              href="#faq"
+              className="text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              FAQ
+            </a>
+            <a
               href="#contact"
               className="text-sm text-gray-400 hover:text-white transition-colors"
             >
@@ -102,6 +108,13 @@ export default function Navbar() {
             className="block text-sm text-gray-400 hover:text-white transition-colors py-2"
           >
             Pricing
+          </a>
+          <a
+            href="#faq"
+            onClick={() => setMobileOpen(false)}
+            className="block text-sm text-gray-400 hover:text-white transition-colors py-2"
+          >
+            FAQ
           </a>
           <a
             href="#contact"

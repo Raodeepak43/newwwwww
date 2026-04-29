@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import { Noto_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const notoSans = Noto_Sans({
+  subsets: ["latin", "devanagari"],
+  variable: "--font-noto-sans",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -27,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="hi" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a0a0a] text-white`}
+        className={`${notoSans.variable} ${geistMono.variable} font-sans antialiased bg-[#0a0a0a] text-white`}
       >
         {children}
       </body>
